@@ -1,0 +1,137 @@
+import java.util.Scanner;
+
+public class ConnectFour {
+
+    public static void main(String[] args) {
+
+        try (Scanner sc = new Scanner(System.in)) {
+            char ch;
+
+            do {
+
+                char[][] board = new char[6][7];
+
+                // Fill board
+                for (int i = 0; i < 6; i++) {
+                    for (int j = 0; j < 7; j++) {
+                        board[i][j] = '.';
+                    }
+                }
+
+                char player = 'X';
+                int moves = 0;
+                boolean win = false;
+
+                while (moves < 42 && !win) {
+
+                    // Display board
+                    System.out.println();
+                    for (int i = 0; i < 6; i++) {
+                        for (int j = 0; j < 7; j++) {
+                            System.out.print(board[i][j] + " ");
+                        }
+                        System.out.println();
+                    }
+                    System.out.println("1 2 3 4 5 6 7");
+
+                    // Input
+                    System.out.print("Player " + player + " Enter Column (1-7): ");
+                    int col = sc.nextInt() - 1;
+
+                    if (col < 0 || col > 6) {
+                        System.out.println("Invalid Column!");
+                        continue;
+                    }
+
+                    boolean placed = false;
+
+                    // Drop piece
+                    for (int i = 5; i >= 0; i--) {
+                        if (board[i][col] == '.') {
+                            board[i][col] = player;
+                            placed = true;
+                            moves++;
+                            break;
+                        }
+                    }
+
+                    if (!placed) {
+                        System.out.println("Column Full!");
+                        continue;
+                    }
+
+                    // Horizontal Check
+                    for (int i = 0; i < 6; i++) {
+                        for (int j = 0; j < 4; j++) {
+                            if (board[i][j] == player &&
+                                board[i][j + 1] == player &&
+                                board[i][j + 2] == player &&
+                                board[i][j + 3] == player) {
+                                win = true;
+                            }
+                        }
+                    }
+
+                    // Vertical Check
+                    for (int i = 0; i < 3; i++) {
+                        for (int j = 0; j < 7; j++) {
+                            if (board[i][j] == player &&
+                                board[i + 1][j] == player &&
+                                board[i + 2][j] == player &&
+                                board[i + 3][j] == player) {
+                                win = true;
+                            }
+                        }
+                    }
+
+                    // Diagonal \
+                    for (int i = 0; i < 3; i++) {
+                        for (int j = 0; j < 4; j++) {
+                            if (board[i][j] == player &&
+                                board[i + 1][j + 1] == player &&
+                                board[i + 2][j + 2] == player &&
+                                board[i + 3][j + 3] == player) {
+                                win = true;
+                            }
+                        }
+                    }
+
+                    // Diagonal /
+                    for (int i = 3; i < 6; i++) {
+                        for (int j = 0; j < 4; j++) {
+                            if (board[i][j] == player &&
+                                board[i - 1][j + 1] == player &&
+                                board[i - 2][j + 2] == player &&
+                                board[i - 3][j + 3] == player) {
+                                win = true;
+                            }
+                        }
+                    }
+
+                    if (win) {
+                        System.out.println();
+                        for (int i = 0; i < 6; i++) {
+                            for (int j = 0; j < 7; j++) {
+                                System.out.print(board[i][j] + " ");
+                            }
+                            System.out.println();
+                        }
+                        System.out.println("Player " + player + " Wins!");
+                    } else {
+                        if (player == 'X')
+                            player = 'O';
+                        else
+                            player = 'X';
+                    }
+                }
+
+                if (!win)
+                    System.out.println("Match Draw!");
+
+                System.out.print("Play Again (Y/N): ");
+                ch = sc.next().charAt(0);
+
+            } while (ch == 'Y' || ch == 'y');
+        }
+    }
+}
